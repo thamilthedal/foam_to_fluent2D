@@ -6,15 +6,15 @@ import modules.helper as ch
 
 
 def point_convert():
-    df = pd.read_csv('./data/points_data.csv', sep='\t')
-    df.columns = ["ID", "X", "Y", "Z"]
-    # print(df.head)
 
-    i = df[df.Z != 0.0].index
-    df = df.drop(i)
-    df.pop('Z')
-    # print(df.head)
-    df.to_csv('./data/points_data.csv', sep='\t')
+    points_df = pd.read_csv('./data/points_data.csv', sep='\t')
+    points_df.columns = ['ID', 'X', 'Y', 'Z']
+    remove_index = points_df[points_df['Z'] != 0.0].index
+    points_df = points_df.drop(index = remove_index)
+    points_df = points_df.reset_index(drop=True)
+    points_df['new_ID'] = points_df.index
+    points_df.pop('Z')
+    points_df.to_csv('./data/points_data.csv', sep='\t')
     print(f"Points Converted {datetime.datetime.now()}")
 
 
@@ -33,6 +33,10 @@ def get_order(row):
 def get_hex_value(x):
     return str(hex(x)).replace("0x", "")
 
+def replace_aligned(x):
+    points_df = pd.read_csv('./data/points_data.csv', sep='\t')
+    index = points_df[points_df["ID"] == x-1].index
+    return points_df.loc[index]['new_ID'].values[0]+1
 
 def convert_face_data(file_name):
     try:
@@ -41,7 +45,8 @@ def convert_face_data(file_name):
         df.drop(columns=['N', 'ID'], inplace=True)
 
         # Get point IDs
-        point_ID = pd.read_csv('./data/points_data.csv', sep='\t')['ID']+1
+        point_df = pd.read_csv('./data/points_data.csv', sep='\t')
+        point_ID = point_df['ID']+1
 
         # Replace non-point IDs with 'T'
         df[['A', 'B', 'C', 'D']] = df[['A', 'B', 'C', 'D']].where(df[['A', 'B', 'C', 'D']].isin(point_ID.values), 'T')
@@ -53,6 +58,9 @@ def convert_face_data(file_name):
         df['N1'] = df.apply(lambda row: row.iloc[row['order'][0]], axis=1)
         df['N2'] = df.apply(lambda row: row.iloc[row['order'][1]], axis=1)
 
+        # Replace misaligned
+        df[['N1', 'N2']] = df[['N1', 'N2']].apply(lambda x: x.map(replace_aligned))
+        
         # Convert to hexadecimal
         df[['N1', 'N2', 'X1', 'X2']] = df[['N1', 'N2', 'X1', 'X2']].apply(lambda x: x.map(get_hex_value))
 
