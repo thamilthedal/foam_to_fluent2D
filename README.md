@@ -2,7 +2,7 @@
 
 - Converts fluent 3D mesh generated in OpenFoam for 2D geometries into 2D Fluent Mesh to used in ANSYS Fluent
 - Mesh format that is handled is *.msh
-- Works so far for Cartesian geometries for only one face.
+- Should work for most of structured meshes.
 - Automate meshing in batches.
 - Saves Mesh info in a database.
 
@@ -13,7 +13,6 @@
 
 ## Improvements to make:
 - foamMeshToFluent3D takes more time than conversion from 2.5D to 2D. So, a direct approach to convert from blockMesh to Fluent 2D will be done next.
-- Should be extended to multiple faces and any geometry.
 
 ## Dependencies:
 - Pandas
