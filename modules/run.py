@@ -80,8 +80,10 @@ def obtain_data(file_name, n_boundaries):
 
 def convert_data(n_boundaries):
     cc.point_convert()
-    cc.face_convert()
-    cc.boundary_convert(n_boundaries)
+    point_df = pd.read_csv('./data/points_data.csv', sep='\t')
+    point_df = point_df.astype({"ID": 'int', "new_ID": 'int'})
+    cc.face_convert(point_df)
+    cc.boundary_convert(n_boundaries, point_df)
     cc.header_edits(n_boundaries)
 
 

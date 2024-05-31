@@ -1,5 +1,4 @@
 import datetime
-
 import pandas as pd
 
 import modules.helper as ch
@@ -33,23 +32,23 @@ def get_order(row):
 def get_hex_value(x):
     return str(hex(x)).replace("0x", "")
 
-def replace_aligned(x):
-    points_df = pd.read_csv('./data/points_data.csv', sep='\t')
-    index = points_df[points_df["ID"] == x-1].index
-    return points_df.loc[index]['new_ID'].values[0]+1
+# Optimized function using the lookup dictionary
+def replace_aligned(x, lookup_dict):
+    return lookup_dict.get(x-1, None)  # Returns None if x-1 is not found
 
-def convert_face_data(file_name):
+def convert_face_data(file_name, point_df):
     try:
         df = pd.read_csv(file_name, sep='\t')
         df.columns = ["ID", "N", "A", "B", "C", "D", "X1", "X2"]
         df.drop(columns=['N', 'ID'], inplace=True)
 
         # Get point IDs
-        point_df = pd.read_csv('./data/points_data.csv', sep='\t')
         point_ID = point_df['ID']+1
 
         # Replace non-point IDs with 'T'
         df[['A', 'B', 'C', 'D']] = df[['A', 'B', 'C', 'D']].where(df[['A', 'B', 'C', 'D']].isin(point_ID.values), 'T')
+
+        # print(f"Replace with T: {datetime.datetime.now()}")
 
         # Determine order of points
         df['order'] = df[['A', 'B', 'C', 'D']].apply(get_order, axis=1)
@@ -58,12 +57,19 @@ def convert_face_data(file_name):
         df['N1'] = df.apply(lambda row: row.iloc[row['order'][0]], axis=1)
         df['N2'] = df.apply(lambda row: row.iloc[row['order'][1]], axis=1)
 
-        # Replace misaligned
-        df[['N1', 'N2']] = df[['N1', 'N2']].apply(lambda x: x.map(replace_aligned))
+        # print(f"Reorder: {datetime.datetime.now()}")
         
+        lookup_dict = {int(row['ID']):int(row['new_ID']+1) for _, row in point_df.iterrows()}
+        # print(f"Lookup Dict: {datetime.datetime.now()}")
+        # Replace misaligned
+        df[['N1', 'N2']] = df[['N1', 'N2']].apply(lambda x: x.map(lambda y: replace_aligned(y, lookup_dict)))        
+        # print(f"Replace Misaligned: {datetime.datetime.now()}")
+ 
         # Convert to hexadecimal
         df[['N1', 'N2', 'X1', 'X2']] = df[['N1', 'N2', 'X1', 'X2']].apply(lambda x: x.map(get_hex_value))
 
+        # print(f"Hex Conversion: {datetime.datetime.now()}")
+        
         # Save to file
         df[['N1', 'N2', 'X1', 'X2']].to_csv(file_name, sep='\t',
                                             index=False)  # Add index=False to avoid saving row indices
@@ -71,16 +77,16 @@ def convert_face_data(file_name):
         print(f"An error occurred in convert_face_data: {e}")
 
 
-def face_convert():
+def face_convert(point_df):
     print("Faces\n")
-    convert_face_data('./data/face_data.csv')
+    convert_face_data('./data/face_data.csv', point_df)
     print("Faces Over")
 
 
-def boundary_convert(n_boundaries: int):
+def boundary_convert(n_boundaries: int, point_df):
     for i in range(n_boundaries):
         print(f"Boundary {i + 1}\n")
-        convert_face_data(f'./data/boundary_data_{i + 1}.csv')
+        convert_face_data(f'./data/boundary_data_{i + 1}.csv', point_df)
 
 
 def header_replace(line, X, Y):
