@@ -14,12 +14,12 @@ def obtain_data():
     cr.get_boundary_data(all_faces_data, owner_data, boundary_info)
 
     with open("./data/header.txt", "a") as f:
-        f.write(f'(12 (0 1 {hex(n_nodes).split('x')[-1]} 0 0))\n')
-        f.write(f'(13 (0 1 {hex(len(all_faces_data)).split('x')[-1]} 0 0))\n\n')
-        f.write(f'(10 (1 1 {hex(len(points_data)).split('x')[-1]} 1 3)\n(\n')
+        f.write(f"(12 (0 1 {hex(n_nodes).split('x')[-1]} 0 0))\n")
+        f.write(f"(13 (0 1 {hex(len(all_faces_data)).split('x')[-1]} 0 0))\n\n")
+        f.write(f"(10 (1 1 {hex(len(points_data)).split('x')[-1]} 1 3)\n(\n")
 
     with open("./data/node_header.txt", "w") as f:
-        f.write(f'(12 (1 1 {hex(n_nodes).split('x')[-1]} 1 0)(\n')
+        f.write(f"(12 (1 1 {hex(n_nodes).split('x')[-1]} 1 0)(\n")
 
     ch.log_data("I am done Data retrieval!\n\n")
 

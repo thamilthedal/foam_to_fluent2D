@@ -1,0 +1,90 @@
+Auto-Transcript Start Time:  17:23:20, 01 Jun 2024 India Standard Time 
+Current Directory: "D:\wsl\openFoam\axis_mesh_v1\mesh"
+
+              Welcome to ANSYS Fluent 2022 R2
+
+              Copyright 1987-2022 ANSYS, Inc. All Rights Reserved.
+              Unauthorized use, distribution or duplication is prohibited.
+              This product is subject to U.S. laws governing export and re-export.
+              For full Legal Notice, see documentation.
+
+Build Time: May 27 2022 08:53:57 EDT  Build Id: 10212  
+ 
+Connected License Server List:	1055@license-32.iitb.ac.in
+
+     --------------------------------------------------------------
+     This is an academic version of ANSYS FLUENT. Usage of this product
+     license is limited to the terms and conditions specified in your ANSYS
+     license form, additional terms section.
+     --------------------------------------------------------------
+Host spawning Node 0 on machine "DESKTOP-FO935O8" (win64).
+
+--------------------------------------------------------------------------------
+ID    Hostname         Core  O.S.         PID    Vendor                         
+--------------------------------------------------------------------------------
+n5    DESKTOP-FO935O8  6/6  Windows-x64  5656   Intel(R) Core(TM) i5-9400      
+n4    DESKTOP-FO935O8  5/6  Windows-x64  8168   Intel(R) Core(TM) i5-9400      
+n3    DESKTOP-FO935O8  4/6  Windows-x64  7808   Intel(R) Core(TM) i5-9400      
+n2    DESKTOP-FO935O8  3/6  Windows-x64  3244   Intel(R) Core(TM) i5-9400      
+n1    DESKTOP-FO935O8  2/6  Windows-x64  1716   Intel(R) Core(TM) i5-9400      
+n0*   DESKTOP-FO935O8  1/6  Windows-x64  13784  Intel(R) Core(TM) i5-9400      
+host  DESKTOP-FO935O8       Windows-x64  14300  Intel(R) Core(TM) i5-9400      
+
+MPI Option Selected: intel
+Selected system interconnect: default
+--------------------------------------------------------------------------------
+
+Cleanup script file is D:\\wsl\\openFoam\\axis_mesh_v1\\mesh\\cleanup-fluent-DESKTOP-FO935O8-14300.bat
+
+Posting ANSYS Product Improvement Program startup data
+Done.
+Reading "D:/wsl/openFoam/axis_mesh_v1/mesh/M1-Z1.msh"...
+Buffering for file scan...
+
+  128757 nodes.
+  255244 2D interior faces, zone  2.
+     500 2D pressure-inlet faces, zone 10.
+     500 2D pressure-inlet faces, zone 11.
+     256 2D pressure-inlet faces, zone 12.
+     200 2D wall faces, zone 13.
+      56 2D wall faces, zone 14.
+  128000 quadrilateral cells, zone  1.
+
+Building...
+     mesh
+	auto partitioning mesh by Metis (fast),
+	distributing mesh
+		parts......,
+		faces......,
+		nodes......,
+		cells......,
+        bandwidth reduction using Reverse Cuthill-McKee: 17058/136 = 125.426
+     materials,
+     interface,
+     domains,
+     zones,
+	unheatedwall
+	heatedwall
+	axis
+	outlet
+	inlet
+	interior-1
+	fluid-1
+     parallel,
+Done.
+Warning: The use of axis boundary conditions is not appropriate for
+         a 2D/3D flow problem. Please consider changing the zone
+         type to symmetry or wall, or the problem to axisymmetric.
+
+Warning: The use of axis boundary conditions is not appropriate for
+         a 2D/3D flow problem. Please consider changing the zone
+         type to symmetry or wall, or the problem to axisymmetric.
+
+
+> /exit y
+
+Posting ANSYS Product Improvement Program performance data 
+Done.
+(cx-gui-do cx-activate-item "Question*OK")
+Auto-Transcript Stop Time:  17:23:41, 01 Jun 2024 India Standard Time 
+Total Transcript Time: 0 Minute 21 Second.

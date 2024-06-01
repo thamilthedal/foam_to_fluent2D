@@ -46,7 +46,7 @@ def get_points():
         f.write(f'(0 "Dimension:")\n')
         f.write(f'(2 3)\n\n')
         f.write(f'(0 "Grid dimensions:")\n')
-        f.write(f'(10 (0 1 {hex(n_points).split('x')[-1]} 0 3))\n')
+        f.write(f"(10 (0 1 {hex(n_points).split('x')[-1]} 0 3))\n")
 
     return points_df
 
@@ -169,12 +169,12 @@ def get_boundary_data(all_faces_data, owner_data, boundary_info):
                 if i['name'] == 'outlet':
                     bc = 'pressure-outlet'
 
-            with open(f"./boundary_header_{count}.txt", "w") as f:
+            with open(f"./data/boundary_header_{count}.txt", "w") as f:
                 f.write(
                     f"(13 ({hex(boundary_id).split('x')[-1]} {hex(i['start'] + 1).split('x')[-1]} {hex(end).split('x')[-1]} {type} 0)\n")
             boundary_id += 1
 
-            with open("./footer.txt", "a") as f:
+            with open("./data/footer.txt", "a") as f:
                 f.write(f"(39 ({boundary_id - 1} {bc} {i['name']})())\n")
 
 

@@ -16,13 +16,13 @@ FoamFile
 convertToMeters 1;
 
 //Control Parameters
-rad 1;
+rad 5e-3;
 D #calc "2.0 * $rad";
 
 
-Ai #calc "0.5 * $D";
-Lts 1;
-Lo #calc "0.5 * $D";
+Ai #calc "30 * $D";
+Lts 2.5;
+Lo #calc "40 * $D";
 
 
 // Geometry Variables
@@ -30,13 +30,12 @@ Ats #calc "$Ai + $Lts";
 Ao #calc "$Ats + $Lo";
 
 //Mesh Parameters
-Na 10;
+Nr 500;
+Na 80;
 Nai #calc "std::floor($Na * $Ai)";
 Nats #calc "std::floor($Na * $Ats) - $Nai";
 Nao #calc "std::floor($Na * $Ao) - ($Nats + $Nai)";
-Nr 10;
-bf 1;
-
+bf 0.01;
 
 vertices
 (

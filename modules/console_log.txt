@@ -2293,3 +2293,15 @@ ENTERING DATA GATHERING PHASE!
 (39 (14 wall unheatedWall)())
 I am done Data retrieval!
 
+ENTERING DATA GATHERING PHASE!
+I am done Data retrieval!
+
+ENTERING DATA GATHERING PHASE!
+I am done Data retrieval!
+
+ENTERING DATA GATHERING PHASE!
+I am done Data retrieval!
+
+ENTERING DATA GATHERING PHASE!
+I am done Data retrieval!
+

@@ -1,0 +1,121 @@
+/*--------------------------------^- C++ -^----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | foam-extend: Open Source CFD                    |
+|  \\    /   O peration     | Version:     1.5                                |
+|   \\  /    A nd           | Web:         http://www.cfdyna.com              |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+convertToMeters 1;
+
+//Control Parameters
+rad {r};
+D #calc "2.0 * $rad";
+
+
+Ai #calc "{e1} * $D";
+Lts {l};
+Lo #calc "{e2} * $D";
+
+
+// Geometry Variables
+Ats #calc "$Ai + $Lts";
+Ao #calc "$Ats + $Lo";
+
+//Mesh Parameters
+Nr {a};
+Na {b};
+Nai #calc "std::floor($Na * $Ai)";
+Nats #calc "std::floor($Na * $Ats) - $Nai";
+Nao #calc "std::floor($Na * $Ao) - ($Nats + $Nai)";
+bf {bf};
+
+vertices
+(
+    (0 0 0)            
+    ($Ai 0 0)          
+    ($Ai $rad 0)       
+    (0  $rad 0)        
+    ($Ats 0 0)         
+    ($Ats $rad 0)      
+    ($Ao 0 0)          
+    ($Ao $rad 0)       
+    (0 0 0.01)         
+    ($Ai 0 0.01)       
+    ($Ai $rad 0.01)     
+    (0  $rad 0.01)      
+    ($Ats 0 0.01)       
+    ($Ats $rad 0.01)    
+    ($Ao 0 0.01)        
+    ($Ao $rad 0.01)     
+
+);
+
+blocks
+(
+    hex (0 1 2 3 8 9 10 11) ($Nai $Nr 1) simpleGrading (1 $bf 1)
+    hex (1 4 5 2 9 12 13 10) ($Nats $Nr 1) simpleGrading (1 $bf 1)
+    hex (4 6 7 5 12 14 15 13) ($Nao $Nr 1) simpleGrading (1 $bf 1)
+);
+
+
+boundary
+(
+    inlet
+    {
+        type patch;
+        faces
+        (
+            (0 3 11 8)
+        );
+    }
+	outlet
+	{
+		type patch;
+		faces
+		(
+			(6 7 15 14)
+		);
+	}
+    axis
+    {
+        type patch;
+        faces
+        (
+            (0 1 9 8)
+            (1 4 12 9)
+            (4 6 14 12)
+        );
+    }
+	heatedWall
+	{
+		type wall;
+		faces
+		(
+            (2 5 13 10)
+		);
+	}
+    unheatedWall
+	{
+		type wall;
+		faces
+		(
+            (3 2 10 11)
+            (5 7 15 13)
+		);
+	}
+);
+
+mergePatchPairs
+(
+
+);
+
+// ************************************************************************* //

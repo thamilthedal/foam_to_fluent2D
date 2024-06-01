@@ -19,41 +19,41 @@ FoamFile
     inlet
     {
         type            patch;
-        nFaces          10;
-        startFace       560;
+        nFaces          500;
+        startFace       255244;
     }
     outlet
     {
         type            patch;
-        nFaces          10;
-        startFace       570;
+        nFaces          500;
+        startFace       255744;
     }
     axis
     {
         type            patch;
-        nFaces          30;
-        startFace       580;
+        nFaces          256;
+        startFace       256244;
     }
     heatedWall
     {
         type            wall;
         inGroups        List<word> 1(wall);
-        nFaces          10;
-        startFace       610;
+        nFaces          200;
+        startFace       256500;
     }
     unheatedWall
     {
         type            wall;
         inGroups        List<word> 1(wall);
-        nFaces          20;
-        startFace       620;
+        nFaces          56;
+        startFace       256700;
     }
     defaultFaces
     {
         type            empty;
         inGroups        List<word> 1(empty);
-        nFaces          600;
-        startFace       640;
+        nFaces          256000;
+        startFace       256756;
     }
 )
 
