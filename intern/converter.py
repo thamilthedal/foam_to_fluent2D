@@ -1,19 +1,19 @@
 import datetime
 import pandas as pd
 
-import modules.helper as ch
+import helper as ch
 
 
 def point_convert():
 
-    points_df = pd.read_csv('./data/points_data.csv', sep='\t')
+    points_df = pd.read_csv('./points_data.csv', sep='\t')
     points_df.columns = ['ID', 'X', 'Y', 'Z']
     remove_index = points_df[points_df['Z'] != 0.0].index
     points_df = points_df.drop(index = remove_index)
     points_df = points_df.reset_index(drop=True)
     points_df['new_ID'] = points_df.index
     points_df.pop('Z')
-    points_df.to_csv('./data/points_data.csv', sep='\t')
+    points_df.to_csv('./points_data.csv', sep='\t')
     print(f"Points Converted {datetime.datetime.now()}")
 
 
@@ -80,14 +80,14 @@ def convert_face_data(file_name, point_df):
 
 def face_convert(point_df):
     print("Faces\n")
-    convert_face_data('./data/face_data.csv', point_df)
+    convert_face_data('./face_data.csv', point_df)
     print("Faces Over")
 
 
 def boundary_convert(n_boundaries: int, point_df):
     for i in range(n_boundaries):
         print(f"Boundary {i + 1}\n")
-        convert_face_data(f'./data/boundary_data_{i + 1}.csv', point_df)
+        convert_face_data(f'./boundary_data_{i + 1}.csv', point_df)
 
 
 def header_replace(line, X, Y):
@@ -101,10 +101,10 @@ def header_replace(line, X, Y):
 
 def header_edits(n_boundaries: int):
     # Main Header
-    header = ch.read_data('./data/header.txt', 0, -1)
+    header = ch.read_data('./header.txt', 0, -1)
     header[0] = header[0].replace("Fluent", "2D Fluent")
     header[3] = header[3].replace("3", "2")
-    n_points = pd.read_csv('./data/points_data.csv', sep='\t').shape[0]
+    n_points = pd.read_csv('./points_data.csv', sep='\t').shape[0]
     y = get_hex_value(n_points)
     header[6] = header[6].replace(header[6].split()[3], y, 1)
     header[6] = header_replace(header[6], "3", "2")
@@ -116,13 +116,13 @@ def header_edits(n_boundaries: int):
     count = 0
     # Boundary Header
     for i in range(n_boundaries):
-        boundary_header = ch.read_data(f'./data/boundary_header_{i + 1}.txt', 0, 1)
+        boundary_header = ch.read_data(f'./boundary_header_{i + 1}.txt', 0, 1)
         boundary_header[0] = header_replace(boundary_header[0], "0", "2")
         ch.save_header(boundary_header, f'boundary_header_{i + 1}')
         count = boundary_header[0].split()[3]
 
     # Face Header
-    face_header = ch.read_data('./data/face_header.txt', 0, 1)
+    face_header = ch.read_data('./face_header.txt', 0, 1)
     face_header[0] = header_replace(face_header[0], "0", "2")
 
     prev_count = header[8].split()[3]
@@ -131,7 +131,7 @@ def header_edits(n_boundaries: int):
     ch.save_header(face_header, 'face_header')
 
     # Node Header
-    node_header = ch.read_data('./data/node_header.txt', 0, 1)
+    node_header = ch.read_data('./node_header.txt', 0, 1)
     NH = node_header[0][:-2] + ')'
     NH = header_replace(NH, "0", "3")
     node_header[0] = header[7]

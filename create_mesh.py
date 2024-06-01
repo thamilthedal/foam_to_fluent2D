@@ -18,7 +18,7 @@ for n, i in enumerate(mesh_settings):
     mesh_name = f"M{n+1}-{ID}"
     make_copy(i)
     os.system("mv ./test ./mesh_ground/system/blockMeshDict")
-    os.system("cd ./mesh_ground && blockMesh && foamMeshToFluent")
+    os.system("cd ./mesh_ground && blockMesh")
     fmp()
     os.system(f"mv ./mesh_ground/fluentInterface/mesh_ground_converted.msh ./mesh/{mesh_name}.msh")
     ad.add_database([mesh_name, ID, "2D", i[0], i[1], i[2], i[3], i[4], i[5], i[6]])

@@ -3,80 +3,27 @@ import pandas as pd
 import numpy as np
 import modules.converter as cc
 import modules.writer as cw
+import modules.reader as cr
 
-
-def obtain_data(file_name, n_boundaries):
+def obtain_data():
     ch.log_data("ENTERING DATA GATHERING PHASE!\n")
+    points_data = cr.get_points()
+    all_faces_data, owner_data, face_data = cr.get_faces()
+    boundary_info = cr.get_boundary_info()
+    n_nodes = cr.get_n_nodes()
+    cr.get_boundary_data(all_faces_data, owner_data, boundary_info)
 
-    header = ch.read_data(file_name, 0, 12)
-    ch.save_header(header, "header")
-    ch.log_data(header)
+    with open("./data/header.txt", "a") as f:
+        f.write(f'(12 (0 1 {hex(n_nodes).split('x')[-1]} 0 0))\n')
+        f.write(f'(13 (0 1 {hex(len(all_faces_data)).split('x')[-1]} 0 0))\n\n')
+        f.write(f'(10 (1 1 {hex(len(points_data)).split('x')[-1]} 1 3)\n(\n')
 
-    # Reading Points Data
-    point_skip = 12
-    n_points = int(header[-2].split()[3], 16)
-    ch.log_data(n_points)
-    points_data = pd.DataFrame(np.genfromtxt(
-        file_name,
-        skip_header=point_skip,
-        max_rows=n_points,
-    ))
-    points_data.to_csv('./data/points_data.csv', sep='\t')
-    ch.log_data(points_data.head)
+    with open("./data/node_header.txt", "w") as f:
+        f.write(f'(12 (1 1 {hex(n_nodes).split('x')[-1]} 1 0)(\n')
 
-    # Reading Face Data
-    face_header = ch.read_data(file_name,
-                               point_skip + n_points + 2,
-                               point_skip + n_points + 3)[0]
-    ch.save_header(face_header, "face_header")
-    ch.log_data(face_header)
-    face_skip = point_skip + n_points + 4
-    n_faces = int(face_header.split()[3], 16)
-    ch.log_data(n_faces)
-    n_all_faces = n_faces
-    face_data = ch.get_face_data(file_name, face_skip, n_faces)
-    face_data.to_csv('./data/face_data.csv', sep='\t')
-    ch.log_data(face_data.head)
-
-    # Reading Boundary Data
-    boundary_skip = face_skip + n_faces + 3
-    header_skip = face_skip + n_faces + 1
-    boundary_data = []
-    boundary_header = [0] * n_boundaries
-    for n in range(n_boundaries):
-        boundary_header[n] = ch.read_data(file_name,
-                                          header_skip,
-                                          header_skip + 1)[0]
-        ch.save_header(boundary_header[n], f"boundary_header_{n + 1}")
-        n_boundary_faces = (
-                                   int(boundary_header[n].split()[3], 16) -
-                                   int(boundary_header[n].split()[2], 16)) + 1
-        header_skip += n_boundary_faces + 3
-        boundary_data.append(ch.get_face_data(file_name,
-                                              boundary_skip,
-                                              n_boundary_faces))
-        boundary_data[n].to_csv(f'./data/boundary_data_{n + 1}.csv', sep='\t')
-        boundary_skip += n_boundary_faces + 3
-        n_all_faces += n_boundary_faces
-        ch.log_data(boundary_header[n])
-        ch.log_data(boundary_data[n].head)
-
-    # Reading Node Header
-    node_skip = boundary_skip + 1 + (int(header[-4].split()[3], 16) - n_all_faces)
-    ch.log_data(node_skip)
-    node_header = ch.read_data(file_name,
-                               node_skip,
-                               node_skip + 1)[0]
-    ch.save_header(node_header, "node_header")
-    ch.log_data(node_header)
-
-    # Reading Footer
-    footer_skip = node_skip + 2
-    footer = ch.read_data(file_name, footer_skip, -1)
-    ch.log_data(footer)
-    ch.save_header(footer, "footer")
     ch.log_data("I am done Data retrieval!\n\n")
 
+    return len(boundary_info)-1
 
 def convert_data(n_boundaries):
     cc.point_convert()
