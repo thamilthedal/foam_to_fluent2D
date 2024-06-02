@@ -6,10 +6,6 @@ def read_data(file_name, start, stop):
         A = f.readlines()[start:stop]
     return A
 
-def read_file(file_name):
-    with open(file_name, 'r') as f:
-        A = f.readlines()
-    return A
 
 def get_face_data(file_name, skip, n_rows):
 
@@ -39,4 +35,29 @@ def save_header(data, file_name):
         else:
             f.write(data)
 
+def read_file(file_name):
+    with open(file_name, 'r') as f:
+        return f.readlines()
+
+
+def get_file_info(file_list):
+    for n, i in enumerate(file_list):
+        if '(' in i:
+            start_ID = n
+            break
+
+    for n, i in enumerate(file_list):
+        if ')' in i:
+            end_ID = n
+
+    count = int(file_list[start_ID - 1].strip())
+    return [count, file_list[start_ID:end_ID]]
+
+
+def clean_and_split(row):
+    return row.strip("(").strip(")\n").split()
+
+
+def clean_and_split_face(row):
+    return row.strip("(").strip(")\n").split("(")[1].split()
 

@@ -91,11 +91,11 @@ def boundary_convert(n_boundaries: int, point_df):
 
 
 def header_replace(line, X, Y):
-    print(line)
+    # print(line)
     a = line.split()
     a[-1] = a[-1].replace(X, Y)
     b = " ".join(a)
-    print(b)
+    # print(b)
     return b
 
 

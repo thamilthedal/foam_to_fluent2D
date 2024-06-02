@@ -1,42 +1,17 @@
 import pandas as pd
 import numpy as np
 pd.options.mode.chained_assignment = None  # default='warn'
-
-def read_file(file_name):
-    with open(file_name, 'r') as f:
-        return f.readlines()
-
-
-def get_file_info(file_list):
-    for n, i in enumerate(file_list):
-        if '(' in i:
-            start_ID = n
-            break
-
-    for n, i in enumerate(file_list):
-        if ')' in i:
-            end_ID = n
-
-    count = int(file_list[start_ID - 1].strip())
-    return [count, file_list[start_ID:end_ID]]
-
-
-def clean_and_split(row):
-    return row.strip("(").strip(")\n").split()
-
-
-def clean_and_split_face(row):
-    return row.strip("(").strip(")\n").split("(")[1].split()
+import modules.helper as ch
 
 
 # Define the file path
 def get_points():
     point_file = './mesh_ground/constant/polyMesh/points'
-    point_file_list = read_file(point_file)
+    point_file_list = ch.read_file(point_file)
     n_points = int(point_file_list[17])
     # print(n_points)
     point_file_list = point_file_list[19:19 + n_points]
-    clean_data = [clean_and_split(item) for item in point_file_list]
+    clean_data = [ch.clean_and_split(item) for item in point_file_list]
     points_df = pd.DataFrame(clean_data, columns=["X", "Y", "Z"])
     # print(points_df.head)
     points_df.to_csv("./data/points_data.csv", sep="\t")
@@ -53,17 +28,17 @@ def get_points():
 
 def get_faces():
     face_file = './mesh_ground/constant/polyMesh/faces'
-    face_file_list = read_file(face_file)
+    face_file_list = ch.read_file(face_file)
     n_faces = int(face_file_list[17])
     # print(n_faces)
     face_file_list = face_file_list[19:19 + n_faces]
-    clean_data = [clean_and_split_face(item) for item in face_file_list]
+    clean_data = [ch.clean_and_split_face(item) for item in face_file_list]
     all_faces_df = pd.DataFrame(clean_data, columns=["A", "B", "C", "D"])
     all_faces_df.to_csv("./data/all_faces_data.csv", sep="\t", index=None)
 
     # neighbour_data
     neighbour_file = './mesh_ground/constant/polyMesh/neighbour'
-    neighbour_file_list = read_file(neighbour_file)
+    neighbour_file_list = ch.read_file(neighbour_file)
     n_neighbours = int(neighbour_file_list[18])
     # print(n_neighbours)
     neighbour_file_list = neighbour_file_list[20:20 + n_neighbours]
@@ -72,7 +47,7 @@ def get_faces():
 
     # owner_data
     owner_file = './mesh_ground/constant/polyMesh/owner'
-    owner_file_list = read_file(owner_file)
+    owner_file_list = ch.read_file(owner_file)
     n_owners = int(owner_file_list[18])
     owner_file_list = owner_file_list[20:20 + n_owners]
     clean_data = [item.strip() for item in owner_file_list]
@@ -114,8 +89,8 @@ def get_info(info_list, string):
 
 def get_boundary_info():
     boundary_file = "./mesh_ground/constant/polyMesh/boundary"
-    file_data = read_file(boundary_file)
-    [n_boundaries, trimmed_file] = get_file_info(file_data)
+    file_data = ch.read_file(boundary_file)
+    [n_boundaries, trimmed_file] = ch.get_file_info(file_data)
 
     boundary_info = []
     for k in range(n_boundaries):
@@ -179,7 +154,7 @@ def get_boundary_data(all_faces_data, owner_data, boundary_info):
 
 
 def get_n_nodes():
-    neighbour = read_file("./mesh_ground/constant/polyMesh/neighbour")
+    neighbour = ch.read_file("./mesh_ground/constant/polyMesh/neighbour")
     return int(neighbour[11].split()[4])
 
 
