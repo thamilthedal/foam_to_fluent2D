@@ -118,6 +118,7 @@ def get_boundary_info():
 def get_boundary_data(all_faces_data, owner_data, boundary_info):
     boundary_id = 10
     count = 0
+    boundary_df = []
     for n, i in enumerate(boundary_info):
         if i['type'] != 'empty':
             count += 1
@@ -132,6 +133,7 @@ def get_boundary_data(all_faces_data, owner_data, boundary_info):
             boundary_data = boundary_data.reset_index(drop=True)
             boundary_data[['A', 'B', 'C', 'D', 'N']] = boundary_data[['A', 'B', 'C', 'D', 'N']].astype(int) +1
             boundary_data.to_csv(f'./data/boundary_data_{count}.csv', sep='\t')
+            boundary_df.append(boundary_data)
             if i['type'] == 'wall':
                 type = 3
                 bc = 'wall'
@@ -152,6 +154,7 @@ def get_boundary_data(all_faces_data, owner_data, boundary_info):
             with open("./data/footer.txt", "a") as f:
                 f.write(f"(39 ({boundary_id - 1} {bc} {i['name']})())\n")
 
+    return boundary_df
 
 def get_n_nodes():
     neighbour = ch.read_file("./mesh_ground/constant/polyMesh/neighbour")

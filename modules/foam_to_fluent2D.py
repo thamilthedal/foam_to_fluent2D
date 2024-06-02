@@ -11,7 +11,7 @@ def obtain_data():
     all_faces_data, owner_data, face_data = cr.get_faces()
     boundary_info = cr.get_boundary_info()
     n_nodes = cr.get_n_nodes()
-    cr.get_boundary_data(all_faces_data, owner_data, boundary_info)
+    boundary_data = cr.get_boundary_data(all_faces_data, owner_data, boundary_info)
 
     with open("./data/header.txt", "a") as f:
         f.write(f"(12 (0 1 {hex(n_nodes).split('x')[-1]} 0 0))\n")
