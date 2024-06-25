@@ -50,7 +50,6 @@ def write_data(points_df, face_df, boundary_df, header_info, output_file, n_boun
 
 
 def main():
-    ch.log_start()
     start = datetime.datetime.now()
     print(start)
     [header_info, points_data, face_data, boundary_data, boundary_info] = obtain_data()

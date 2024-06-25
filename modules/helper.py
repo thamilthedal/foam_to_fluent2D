@@ -19,17 +19,6 @@ def get_face_data(file_name, skip, n_rows):
 
     return A
 
-def log_start():
-    with open('./modules/console_log.txt', 'w') as f:
-        f.write("ENGINE STARTS!\n")
-
-def log_data(data):
-    with open('./modules/console_log.txt', 'a') as f:
-        if type(data) == list:
-            for i in data:
-                f.write(i)
-        else:
-            f.write(str(data))
 
 def save_header(data, file_name):
     with open(f'./data/{file_name}.txt', 'w') as f:
