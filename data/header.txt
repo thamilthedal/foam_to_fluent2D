@@ -1,5 +1,0 @@
-(0 "FOAM to 2D Fluent Mesh File")
-
-(0 "Dimension:")
-(2 2)
-(10 (0 1 1f6f5 0 2))(10 (1 1 1f6f5 1 2)(

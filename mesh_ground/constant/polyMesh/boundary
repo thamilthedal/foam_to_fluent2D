@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     | Website:  https://openfoam.org
-    \\  /    A nd           | Version:  9
+    \\  /    A nd           | Version:  11
      \\/     M anipulation  |
 \*---------------------------------------------------------------------------*/
 FoamFile
@@ -19,41 +19,41 @@ FoamFile
     inlet
     {
         type            patch;
-        nFaces          500;
-        startFace       255244;
+        nFaces          1000;
+        startFace       306846;
     }
     outlet
     {
         type            patch;
-        nFaces          500;
-        startFace       255744;
+        nFaces          1000;
+        startFace       307846;
     }
     axis
     {
         type            patch;
-        nFaces          256;
-        startFace       256244;
+        nFaces          154;
+        startFace       308846;
     }
     heatedWall
     {
         type            wall;
         inGroups        List<word> 1(wall);
-        nFaces          200;
-        startFace       256500;
+        nFaces          140;
+        startFace       309000;
     }
     unheatedWall
     {
         type            wall;
         inGroups        List<word> 1(wall);
-        nFaces          56;
-        startFace       256700;
+        nFaces          14;
+        startFace       309140;
     }
     defaultFaces
     {
         type            empty;
         inGroups        List<word> 1(empty);
-        nFaces          256000;
-        startFace       256756;
+        nFaces          308000;
+        startFace       309154;
     }
 )
 

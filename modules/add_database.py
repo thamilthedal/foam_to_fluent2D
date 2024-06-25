@@ -14,3 +14,7 @@ def add_database(i):
     
     print(f"{i[0]} Data Added")
 
+def check_dir(folder_name):
+    if not os.path.exists(f"./mesh/{folder_name}"):
+        os.mkdir(f"./mesh/{folder_name}")
+

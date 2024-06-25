@@ -19,6 +19,10 @@ def get_face_data(file_name, skip, n_rows):
 
     return A
 
+def log_start():
+    with open('./modules/console_log.txt', 'w') as f:
+        f.write("ENGINE STARTS!\n")
+
 def log_data(data):
     with open('./modules/console_log.txt', 'a') as f:
         if type(data) == list:

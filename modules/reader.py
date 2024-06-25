@@ -1,11 +1,10 @@
 import pandas as pd
 import numpy as np
-pd.options.mode.chained_assignment = None  # default='warn'
 import modules.helper as ch
 
+pd.options.mode.chained_assignment = None
 
-# Define the file path
-def get_points():
+def get_points()->pd.DataFrame:
     point_file = './mesh_ground/constant/polyMesh/points'
     point_file_list = ch.read_file(point_file)
     n_points = int(point_file_list[17])
@@ -13,20 +12,20 @@ def get_points():
     point_file_list = point_file_list[19:19 + n_points]
     clean_data = [ch.clean_and_split(item) for item in point_file_list]
     points_df = pd.DataFrame(clean_data, columns=["X", "Y", "Z"])
-    # print(points_df.head)
-    points_df.to_csv("./data/points_data.csv", sep="\t")
 
-    with open("./data/header.txt", "w") as f:
-        f.write(f'(0 "FOAM to Fluent Mesh File")\n\n')
-        f.write(f'(0 "Dimension:")\n')
-        f.write(f'(2 3)\n\n')
-        f.write(f'(0 "Grid dimensions:")\n')
-        f.write(f"(10 (0 1 {hex(n_points).split('x')[-1]} 0 3))\n")
+    header = []
 
-    return points_df
+    header.append(f'(0 "FOAM to Fluent Mesh File")\n\n')
+    header.append(f'(0 "Dimension:")\n')
+    header.append(f'(2 3)\n\n')
+    header.append(f'(0 "Grid dimensions:")\n')
+    header.append(f"(10 (0 1 {hex(n_points).split('x')[-1]} 0 3))\n")
+    
+    print(f"Number of Points: {n_points}")
+    return [header, points_df]
 
 
-def get_faces():
+def get_faces()->list:
     face_file = './mesh_ground/constant/polyMesh/faces'
     face_file_list = ch.read_file(face_file)
     n_faces = int(face_file_list[17])
@@ -34,7 +33,6 @@ def get_faces():
     face_file_list = face_file_list[19:19 + n_faces]
     clean_data = [ch.clean_and_split_face(item) for item in face_file_list]
     all_faces_df = pd.DataFrame(clean_data, columns=["A", "B", "C", "D"])
-    all_faces_df.to_csv("./data/all_faces_data.csv", sep="\t", index=None)
 
     # neighbour_data
     neighbour_file = './mesh_ground/constant/polyMesh/neighbour'
@@ -64,21 +62,22 @@ def get_faces():
     face_df = face_df.reset_index(drop=True)
 
     face_df[['A', 'B', 'C', 'D', 'N', 'O']] = face_df[['A', 'B', 'C', 'D', 'N', 'O']].astype(int) + 1
-    face_df.to_csv('./data/face_data.csv', sep="\t")
 
     # Face Header
-    with open("./data/face_header.txt", "w") as f:
-        f.write(f"(13 (2 1 {hex(len(face_df)).split('x')[-1]} 2 0)\n")
+    face_header = []
+
+    face_header.append(f"(13 (2 1 {hex(len(face_df)).split('x')[-1]} 2 0)\n")
 
     # Footer
-    with open("./data/footer.txt", "w") as f:
-        f.write(f"(39 (1 fluid fluid-1)())\n")
-        f.write(f"(39 (2 interior interior-1)())\n")
+    footer = []
+    footer.append(f"(39 (1 fluid fluid-1)())\n")
+    footer.append(f"(39 (2 interior interior-1)())\n")
 
-    return all_faces_df, owners_df, face_df
+    print(f"Total Number of Faces: {len(all_faces_df)}")
+    return [face_header, footer, all_faces_df, owners_df, face_df]
 
 
-def get_info(info_list, string):
+def get_info(info_list: list, string: str)->str:
     result = ''
     for i in info_list:
         if string in i:
@@ -87,10 +86,11 @@ def get_info(info_list, string):
     return result
 
 
-def get_boundary_info():
+def get_boundary_info()->dict:
     boundary_file = "./mesh_ground/constant/polyMesh/boundary"
     file_data = ch.read_file(boundary_file)
     [n_boundaries, trimmed_file] = ch.get_file_info(file_data)
+    print(f"Number of Boundaries: {n_boundaries-1}")
 
     boundary_info = []
     for k in range(n_boundaries):
@@ -115,10 +115,11 @@ def get_boundary_info():
     return boundary_info
 
 
-def get_boundary_data(all_faces_data, owner_data, boundary_info):
+def get_boundary_data(all_faces_data, owner_data, boundary_info, footer):
     boundary_id = 10
     count = 0
     boundary_df = []
+    boundary_header = []
     for n, i in enumerate(boundary_info):
         if i['type'] != 'empty':
             count += 1
@@ -132,7 +133,6 @@ def get_boundary_data(all_faces_data, owner_data, boundary_info):
             boundary_data["O"] = np.zeros_like(boundary_data["A"].values)
             boundary_data = boundary_data.reset_index(drop=True)
             boundary_data[['A', 'B', 'C', 'D', 'N']] = boundary_data[['A', 'B', 'C', 'D', 'N']].astype(int) +1
-            boundary_data.to_csv(f'./data/boundary_data_{count}.csv', sep='\t')
             boundary_df.append(boundary_data)
             if i['type'] == 'wall':
                 type = 3
@@ -146,18 +146,15 @@ def get_boundary_data(all_faces_data, owner_data, boundary_info):
                 if i['name'] == 'outlet':
                     bc = 'pressure-outlet'
 
-            with open(f"./data/boundary_header_{count}.txt", "w") as f:
-                f.write(
-                    f"(13 ({hex(boundary_id).split('x')[-1]} {hex(i['start'] + 1).split('x')[-1]} {hex(end).split('x')[-1]} {type} 0)\n")
+            boundary_header_dummy = []
+            boundary_header_dummy.append(f"(13 ({hex(boundary_id).split('x')[-1]} {hex(i['start'] + 1).split('x')[-1]} {hex(end).split('x')[-1]} {type} 0)\n")
             boundary_id += 1
+            boundary_header.append(boundary_header_dummy)
+            footer.append(f"(39 ({boundary_id - 1} {bc} {i['name']})())\n")
 
-            with open("./data/footer.txt", "a") as f:
-                f.write(f"(39 ({boundary_id - 1} {bc} {i['name']})())\n")
+    return [boundary_header, footer, boundary_df]
 
-    return boundary_df
-
-def get_n_nodes():
+def get_n_nodes()->int:
     neighbour = ch.read_file("./mesh_ground/constant/polyMesh/neighbour")
     return int(neighbour[11].split()[4])
-
 
