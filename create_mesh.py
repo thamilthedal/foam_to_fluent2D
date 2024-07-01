@@ -26,6 +26,7 @@ for n, i in enumerate(mesh_settings):
     os.system("mv ./test ./mesh_ground/system/blockMeshDict")
     os.system("cd ./mesh_ground && blockMesh")
     fmp()
+    os.system("rm -r ./mesh_ground/dynamicCode")
     os.system(f"mv ./mesh_ground/fluentInterface/mesh_ground_converted.msh ./mesh/{ID}/{mesh_name}.msh")
     # ad.add_database([mesh_name, ID, "2D", i[0], i[1], i[2], i[3], i[4], i[5], i[6]])
 
