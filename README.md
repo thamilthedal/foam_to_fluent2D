@@ -9,12 +9,12 @@
 
 ## Workflow
 - First blockMesh is generated
+- Make sure the write format is in ascii
 - This script will convert that into Fluent 2D mesh removing extra single cell.
 
 ## Improvements to make:
 - Conversion for other grid shapes like tet, poly, etc.
 
 ## Dependencies:
-- Works for OpenFOAM v. 11 or below
 - Pandas
 - Numpy
