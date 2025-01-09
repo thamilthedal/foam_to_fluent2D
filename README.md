@@ -15,5 +15,6 @@
 - Conversion for other grid shapes like tet, poly, etc.
 
 ## Dependencies:
+- Works for OpenFOAM v. 11 or below
 - Pandas
 - Numpy
