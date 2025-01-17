@@ -5,7 +5,8 @@ import modules.helper as ch
 
 
 def point_convert(points_df):
-    remove_index = points_df[points_df['Z'] != '0'].index
+    Z_filter = list(set(points_df['Z'].values))[0]
+    remove_index = points_df[points_df['Z'] != Z_filter].index
     points_df['ID'] = points_df.index
     points_df = points_df.drop(index = remove_index)
     points_df = points_df.reset_index(drop=True)
