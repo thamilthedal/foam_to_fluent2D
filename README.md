@@ -1,0 +1,30 @@
+# COMMAND LINE INTERFACE FOR MONITORING RESIDUALS FOR A ANSYS FLUENT SIMULATION IN ROCKS CLUSTER:
+
+## Command:
+foamFluent2D
+
+## Getting Started
+
+1. Download the repository
+2. Use Python 3.12 or above.
+3. Run following command
+```
+pip install -e .
+```
+
+4. Run this command after creating a psuedo-2D blockMesh
+
+```
+ff2
+```
+
+# Version History
+
+## Version 1.1 
+Find the list of two Z automatically and filter the first alone (Z1 and Z2 can be any two values)
+
+
+## Version 1.0
+Basic Foam To Fluent 2D for Cartesian 2D grids with a single cell thickness with multiple blocks but for single domain 
+(Z1 = 0 and Z2 > 0)
+
