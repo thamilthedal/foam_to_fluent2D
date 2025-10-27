@@ -1,6 +1,5 @@
 import datetime
 from CLI.lib.run import obtain_data, convert_data, write_data
-from CLI.helper import print_header
 import os
 import errno
 
@@ -48,4 +47,4 @@ def foam_to_fluent_2D(current_working_directory: str = "."):
                f"{current_working_directory}/fluentInterface/fluent_converted.msh",
                n_boundaries)
     minutes, seconds = divmod((datetime.datetime.now() - start).total_seconds(), 60)
-    print_header(f"Mesh created and converted to 2D in (MM:SS): {int(minutes):02}:{seconds:04.1f}")
+    print(f"Mesh created and converted to 2D in (MM:SS): {int(minutes):02}:{seconds:04.1f}")
