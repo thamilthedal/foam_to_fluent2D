@@ -1,4 +1,4 @@
-# COMMAND LINE INTERFACE FOR MONITORING RESIDUALS FOR A ANSYS FLUENT SIMULATION IN ROCKS CLUSTER:
+# Command Line Interface for converting OpenFOAM created 2.5D meshes into ANSYS Fluent 2D meshes:
 
 ## Command:
 foamFluent2D
@@ -30,6 +30,7 @@ Find the list of two Z automatically and filter the first alone (Z1 and Z2 can b
 ## Version 1.0
 Basic Foam To Fluent 2D for Cartesian 2D grids with a single cell thickness with multiple blocks but for single domain 
 (Z1 = 0 and Z2 > 0)
+
 
 
 
