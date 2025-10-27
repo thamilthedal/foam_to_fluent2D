@@ -8,7 +8,7 @@ def get_points(CWD: str)->pd.DataFrame:
     point_file = f'{CWD}/constant/polyMesh/points'
     point_file_list = ch.read_file(point_file)
     n_points = int(point_file_list[17])
-    print(n_points)
+    # print(n_points)
     point_file_list = point_file_list[19:19 + n_points]
     clean_data = [ch.clean_and_split(item) for item in point_file_list]
     points_df = pd.DataFrame(clean_data, columns=["X", "Y", "Z"])
@@ -29,7 +29,7 @@ def get_faces(CWD: str)->list:
     face_file = f'{CWD}/constant/polyMesh/faces'
     face_file_list = ch.read_file(face_file)
     n_faces = int(face_file_list[17])
-    print(n_faces)
+    # print(n_faces)
     face_file_list = face_file_list[19:19 + n_faces]
     clean_data = [ch.clean_and_split_face(item) for item in face_file_list]
     all_faces_df = pd.DataFrame(clean_data, columns=["A", "B", "C", "D"])
@@ -73,7 +73,7 @@ def get_faces(CWD: str)->list:
     footer.append(f"(39 (1 fluid fluid-1)())\n")
     footer.append(f"(39 (2 interior interior-1)())\n")
 
-    print(f"Total Number of Faces: {len(all_faces_df)}")
+    print(f"Number of Faces: {len(all_faces_df)}")
     return [face_header, footer, all_faces_df, owners_df, face_df]
 
 

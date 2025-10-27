@@ -2,9 +2,12 @@
 import click
 from CLI.commands import _foam_fluent_2D
 
+dir = click.option("--dir", prompt="Working directory", help="Enter folder path")
+
 @click.command()
-def foam_fluent_2D():
-    _foam_fluent_2D()
+@dir
+def foam_fluent_2D(dir):
+    _foam_fluent_2D(dir)
 
 if __name__ == '__main__':
     super()
