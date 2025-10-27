@@ -15,7 +15,7 @@ pip install -e .
 4. Run this command after creating a psuedo-2D blockMesh
 
 ```
-ff2
+ff2 --dir "."
 ```
 
 # Version History
@@ -27,4 +27,5 @@ Find the list of two Z automatically and filter the first alone (Z1 and Z2 can b
 ## Version 1.0
 Basic Foam To Fluent 2D for Cartesian 2D grids with a single cell thickness with multiple blocks but for single domain 
 (Z1 = 0 and Z2 > 0)
+
 
