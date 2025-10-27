@@ -20,6 +20,9 @@ ff2 --dir "."
 
 # Version History
 
+## Version 1.3
+Refactored writer module completely to reduce the lines of code while maintaining similar speed.
+
 ## Version 1.1 
 Find the list of two Z automatically and filter the first alone (Z1 and Z2 can be any two values)
 
@@ -27,5 +30,6 @@ Find the list of two Z automatically and filter the first alone (Z1 and Z2 can b
 ## Version 1.0
 Basic Foam To Fluent 2D for Cartesian 2D grids with a single cell thickness with multiple blocks but for single domain 
 (Z1 = 0 and Z2 > 0)
+
 
 
