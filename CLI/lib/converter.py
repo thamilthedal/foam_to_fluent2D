@@ -5,8 +5,10 @@ import CLI.lib.helper as ch
 
 
 def point_convert(points_df):
-    z_filter = list(set(points_df['Z'].values))[0]
-    # print(z_filter)
+    
+    z_unique = set(points_df['Z'].values)
+    z_filter = [x for x in z_unique if float(x) == 0][0]
+    print(f"Z Filter for {z_filter}")
     remove_index = points_df[points_df['Z'] != z_filter].index
     points_df['old_ID'] = points_df.index+1
     points_df = points_df.drop(index = remove_index)
